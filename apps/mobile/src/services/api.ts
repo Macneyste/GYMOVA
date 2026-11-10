@@ -33,7 +33,7 @@ export function resolveApiUrl(url: string, dev: boolean = __DEV__): string {
   if (!dev && !url.startsWith('https://')) {
     throw new Error(`Insecure API URL in a release build: ${url}. Set EXPO_PUBLIC_API_URL to an https:// URL.`);
   }
-  return url.replace(//+$/, '');
+  return url.replace(/\/+$/, '');
 }
 
 type SessionExpiredHandler = () => void | Promise<void>;

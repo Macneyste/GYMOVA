@@ -12,7 +12,7 @@ export const envValidationSchema = Joi.object({
     .default('http://localhost:3001')
     .when('NODE_ENV', {
       is: 'production',
-      then: Joi.string().pattern(/^(https://[^,s]+)(,s*https://[^,s]+)*$/).messages({
+      then: Joi.string().pattern(/^(https:\/\/[^,\s]+)(,\s*https:\/\/[^,\s]+)*$/).messages({
         'string.pattern.base': 'CORS_ORIGINS must list only https:// origins in production',
       }),
     }),
@@ -24,7 +24,7 @@ export const envValidationSchema = Joi.object({
     .when('NODE_ENV', {
       is: 'production',
       // User data must never cross the network unencrypted.
-      then: Joi.string().pattern(/[?&]sslmode=(require|verify-ca|verify-full)/).messages({
+      then: Joi.string().pattern(/[?&]sslmode=(require|verify-ca|verify-full)(&|$)/).messages({
         'string.pattern.base': 'DATABASE_URL must use TLS in production (add ?sslmode=require or verify-full)',
       }),
     }),
