@@ -24,6 +24,10 @@
     "db:deploy": "npm run prisma:deploy -w @gymova/api",
     "db:seed": "npm run prisma:seed -w @gymova/api",
     "db:studio": "npm run prisma:studio -w @gymova/api",
+    "db:start": "node scripts/db/local-postgres.mjs start",
+    "db:stop": "node scripts/db/local-postgres.mjs stop",
+    "db:status": "node scripts/db/local-postgres.mjs status",
+    "db:setup-roles": "node scripts/db/setup-roles.mjs",
     "docker:up": "docker compose -f infrastructure/docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f infrastructure/docker/docker-compose.yml down"
   },
