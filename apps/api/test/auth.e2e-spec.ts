@@ -38,7 +38,9 @@ describe('Auth (e2e)', () => {
 
   // Each test is its own scenario; reset the per-IP limiter so one test's logins don't throttle the next.
   beforeEach(() => {
-    const st = (app.get(ThrottlerStorage) as unknown as { storage: Map<string, unknown> }).storage; console.log("THR", st.size, [...st.keys()].slice(0,2)); st.clear();
+    const store = app.get(ThrottlerStorage) as unknown as { storage: Map<string, unknown>; hitExpirations: Map<string, unknown> };
+    store.storage.clear();
+    store.hitExpirations.clear();
   });
 
   it('rate-limits repeated login attempts per client', async () => {

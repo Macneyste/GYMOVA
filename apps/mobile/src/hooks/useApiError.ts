@@ -8,8 +8,19 @@ export function useApiErrorMessage(): (error: unknown, fallbackKey?: string) => 
     if (error instanceof NetworkError) return t('common.offline');
     if (error instanceof ApiError) {
       switch (error.code) {
-        case 'UNAUTHORIZED':
+        case 'INVALID_CREDENTIALS':
           return t('auth.invalidCredentials');
+        case 'UNAUTHORIZED':
+        case 'SESSION_EXPIRED':
+          return t('auth.sessionExpiredBody');
+        case 'ACCOUNT_LOCKED':
+          return t('auth.accountLocked');
+        case 'ACCOUNT_DISABLED':
+          return t('auth.accountDisabled');
+        case 'OTP_INVALID':
+          return t('auth.otpInvalid');
+        case 'OTP_EXPIRED':
+          return t('auth.otpExpired');
         case 'CONFLICT':
           return error.message.toLowerCase().includes('email') ? t('auth.emailTaken') : error.message;
         case 'VALIDATION_ERROR': {
@@ -18,6 +29,7 @@ export function useApiErrorMessage(): (error: unknown, fallbackKey?: string) => 
           return key && t(`validation.${key}`, { defaultValue: '' }) ? t(`validation.${key}`) : error.message;
         }
         case 'RATE_LIMITED':
+          return t('auth.tooManyRequests');
         case 'AI_UNAVAILABLE':
         case 'AI_QUOTA_EXCEEDED':
         case 'PROFESSIONAL_GUIDANCE_REQUIRED':

@@ -1,5 +1,8 @@
 {
-  "brand": { "name": "GYMOVA", "tagline": "Tababar. Cun. La soco. Isbeddel." },
+  "brand": {
+    "name": "GYMOVA",
+    "tagline": "Tababar. Cun. La soco. Isbeddel."
+  },
   "common": {
     "loading": "Waa la soo rarayaa…",
     "retry": "Isku day mar kale",
@@ -37,10 +40,32 @@
     "cm": "cm",
     "min": "daq",
     "sec": "il",
-    "days": { "0": "Axd", "1": "Isn", "2": "Tal", "3": "Arb", "4": "Kha", "5": "Jim", "6": "Sab" },
-    "daysLong": { "0": "Axad", "1": "Isniin", "2": "Talaado", "3": "Arbaco", "4": "Khamiis", "5": "Jimco", "6": "Sabti" }
+    "days": {
+      "0": "Axd",
+      "1": "Isn",
+      "2": "Tal",
+      "3": "Arb",
+      "4": "Kha",
+      "5": "Jim",
+      "6": "Sab"
+    },
+    "daysLong": {
+      "0": "Axad",
+      "1": "Isniin",
+      "2": "Talaado",
+      "3": "Arbaco",
+      "4": "Khamiis",
+      "5": "Jimco",
+      "6": "Sabti"
+    }
   },
-  "tabs": { "home": "Guriga", "workout": "Jimicsi", "diet": "Cunto", "coach": "Tababare AI", "progress": "Horumar" },
+  "tabs": {
+    "home": "Guriga",
+    "workout": "Jimicsi",
+    "diet": "Cunto",
+    "coach": "Tababare AI",
+    "progress": "Horumar"
+  },
   "nav": {
     "scanner": "Sawir-qaade Cunto",
     "planner": "Jadwalka Maalinlaha",
@@ -72,7 +97,8 @@
     "message.required": "Qor fariin",
     "message.max": "Fariinta aad bay u dheer tahay",
     "measurement.empty": "Geli ugu yaraan hal cabbir",
-    "required": "Goobtan waa lagama maarmaan"
+    "required": "Goobtan waa lagama maarmaan",
+    "email.taken": "Akoon leh emailkan horay ayuu u jiray"
   },
   "welcome": {
     "title": "Safarkaaga caafimaad, adiga kuu gaar ah",
@@ -80,10 +106,22 @@
     "getStarted": "Bilow",
     "haveAccount": "Horay akoon ayaan u lahaa",
     "slides": [
-      { "title": "Tababar qorshe adiga kuu dhisan", "body": "Jimicsi toddobaadle ku salaysan yoolalkaaga, khibraddaada iyo qalabkaaga." },
-      { "title": "Cun waxa aad taqaan", "body": "La soco canjeero, bariis, suqaar iyo kumanaan cunto caalami ah oo leh nafaqo la xaqiijiyay." },
-      { "title": "Tababare jeebkaaga ku jira", "body": "Weydii Tababaraha Cuntada iyo Jimicsiga AI wakhti kasta. Sawir saxanka si aad dhakhso u diiwaangeliso." },
-      { "title": "Arag horumar dhab ah", "body": "Miisaan, cabbirro, xoog iyo joogtayn — la soo bandhigo xukun la'aan." }
+      {
+        "title": "Tababar qorshe adiga kuu dhisan",
+        "body": "Jimicsi toddobaadle ku salaysan yoolalkaaga, khibraddaada iyo qalabkaaga."
+      },
+      {
+        "title": "Cun waxa aad taqaan",
+        "body": "La soco canjeero, bariis, suqaar iyo kumanaan cunto caalami ah oo leh nafaqo la xaqiijiyay."
+      },
+      {
+        "title": "Tababare jeebkaaga ku jira",
+        "body": "Weydii Tababaraha Cuntada iyo Jimicsiga AI wakhti kasta. Sawir saxanka si aad dhakhso u diiwaangeliso."
+      },
+      {
+        "title": "Arag horumar dhab ah",
+        "body": "Miisaan, cabbirro, xoog iyo joogtayn — la soo bandhigo xukun la'aan."
+      }
     ]
   },
   "auth": {
@@ -129,7 +167,12 @@
     "passwordChanged": "Erayga sirta waa la beddelay",
     "deleteAccount": "Tirtir akoonka",
     "deleteAccountBody": "Tani si joogto ah ayay u tirtiraysaa astaantaada, jimicsiyada, diiwaanka cuntada iyo sawirada 30 maalmood kadib. Geli eraygaaga sirta si aad u xaqiijiso.",
-    "accountDeleted": "Akoonkaaga waxaa loo qorsheeyay tirtirid."
+    "accountDeleted": "Akoonkaaga waxaa loo qorsheeyay tirtirid.",
+    "accountLocked": "Isku day badan oo khaldan. Isku day mar kale 15 daqiiqo kadib ama dib u deji erayga sirta.",
+    "accountDisabled": "Akoonkan waa la xannibay. La xiriir taageerada.",
+    "otpInvalid": "Koodhkaasi waa khalad. Hubi oo mar kale isku day.",
+    "otpExpired": "Koodhkan wuu dhacay. Codso mid cusub.",
+    "tooManyRequests": "Isku day badan. Fadlan sug hal daqiiqo kadibna isku day."
   },
   "settings": {
     "title": "Dejinta",

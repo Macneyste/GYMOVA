@@ -94,6 +94,7 @@ function ThemedApp() {
  */
 function useAuthGate() {
   const status = useSession((s) => s.status);
+  const emailVerified = useSession((s) => !!s.user?.emailVerifiedAt);
   const segments = useSegments();
   const router = useRouter();
 
@@ -101,6 +102,7 @@ function useAuthGate() {
     if (status === 'booting') return;
     const inAuthGroup = segments[0] === '(auth)';
     if (status === 'signedOut' && !inAuthGroup) router.replace('/(auth)/welcome');
-    if (status === 'signedIn' && inAuthGroup) router.replace('/(tabs)');
-  }, [status, segments, router]);
+    // Fresh sign-ins with an unverified email are offered verification once; they may skip it.
+    if (status === 'signedIn' && inAuthGroup) router.replace(emailVerified ? '/(tabs)' : '/(app)/verify-email');
+  }, [status, emailVerified, segments, router]);
 }

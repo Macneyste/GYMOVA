@@ -1,5 +1,8 @@
 {
-  "brand": { "name": "GYMOVA", "tagline": "Train. Eat. Track. Transform." },
+  "brand": {
+    "name": "GYMOVA",
+    "tagline": "Train. Eat. Track. Transform."
+  },
   "common": {
     "loading": "Loading…",
     "retry": "Try again",
@@ -37,10 +40,32 @@
     "cm": "cm",
     "min": "min",
     "sec": "sec",
-    "days": { "0": "Sun", "1": "Mon", "2": "Tue", "3": "Wed", "4": "Thu", "5": "Fri", "6": "Sat" },
-    "daysLong": { "0": "Sunday", "1": "Monday", "2": "Tuesday", "3": "Wednesday", "4": "Thursday", "5": "Friday", "6": "Saturday" }
+    "days": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    },
+    "daysLong": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    }
   },
-  "tabs": { "home": "Home", "workout": "Workout", "diet": "Diet", "coach": "AI Coach", "progress": "Progress" },
+  "tabs": {
+    "home": "Home",
+    "workout": "Workout",
+    "diet": "Diet",
+    "coach": "AI Coach",
+    "progress": "Progress"
+  },
   "nav": {
     "scanner": "Food Scanner",
     "planner": "Daily Planner",
@@ -72,7 +97,8 @@
     "message.required": "Type a message",
     "message.max": "Message is too long",
     "measurement.empty": "Enter at least one measurement",
-    "required": "This field is required"
+    "required": "This field is required",
+    "email.taken": "An account with this email already exists"
   },
   "welcome": {
     "title": "Your fitness journey, personalised",
@@ -80,10 +106,22 @@
     "getStarted": "Get started",
     "haveAccount": "I already have an account",
     "slides": [
-      { "title": "Train with a plan built for you", "body": "Personalised weekly workouts based on your goals, experience and equipment." },
-      { "title": "Eat what you know", "body": "Track canjeero, bariis, suqaar and thousands of international foods with verified nutrition." },
-      { "title": "Coach in your pocket", "body": "Ask the AI Diet and Workout Coach anytime. Scan a plate to log it fast." },
-      { "title": "See real progress", "body": "Weight, measurements, strength and streaks — presented without judgement." }
+      {
+        "title": "Train with a plan built for you",
+        "body": "Personalised weekly workouts based on your goals, experience and equipment."
+      },
+      {
+        "title": "Eat what you know",
+        "body": "Track canjeero, bariis, suqaar and thousands of international foods with verified nutrition."
+      },
+      {
+        "title": "Coach in your pocket",
+        "body": "Ask the AI Diet and Workout Coach anytime. Scan a plate to log it fast."
+      },
+      {
+        "title": "See real progress",
+        "body": "Weight, measurements, strength and streaks — presented without judgement."
+      }
     ]
   },
   "auth": {
@@ -129,7 +167,12 @@
     "passwordChanged": "Password changed",
     "deleteAccount": "Delete account",
     "deleteAccountBody": "This permanently removes your profile, workouts, nutrition logs and photos after a 30-day grace period. Enter your password to confirm.",
-    "accountDeleted": "Your account is scheduled for deletion."
+    "accountDeleted": "Your account is scheduled for deletion.",
+    "accountLocked": "Too many failed attempts. Try again in 15 minutes or reset your password.",
+    "accountDisabled": "This account has been disabled. Contact support.",
+    "otpInvalid": "That code is incorrect. Check it and try again.",
+    "otpExpired": "This code has expired. Request a new one.",
+    "tooManyRequests": "Too many attempts. Please wait a minute and try again."
   },
   "settings": {
     "title": "Settings",
