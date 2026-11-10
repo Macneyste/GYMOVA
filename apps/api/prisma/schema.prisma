@@ -1,0 +1,35 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum Sex { MALE FEMALE UNSPECIFIED }
+enum ActivityLevel { SEDENTARY LIGHT MODERATE VERY_ACTIVE }
+enum FitnessGoal { LOSE_WEIGHT MAINTAIN GAIN_MUSCLE }
+enum MealType { BREAKFAST LUNCH DINNER SNACK }
+enum WorkoutStatus { ACTIVE COMPLETED ABANDONED }
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  passwordHash String
+  fullName String
+  preferredLanguage String @default("en")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile FitnessProfile?
+  refreshTokens RefreshToken[]
+  foodLogs FoodLog[]
+  waterLogs WaterLog[]
+  workoutSessions WorkoutSession[]
+}
+model RefreshToken { id String @id @default(uuid()) tokenHash String userId String expiresAt DateTime revokedAt DateTime? createdAt DateTime @default(now()) user User @relation(fields:[userId],references:[id],onDelete:Cascade) }
+model FitnessProfile {
+  id String @id @default(uuid()) userId String @unique user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  sex Sex @default(UNSPECIFIED) birthDate DateTime? heightCm Float? currentWeightKg Float? targetWeightKg Float? activity ActivityLevel @default(MODERATE) goal FitnessGoal @default(MAINTAIN)
+  equipment String[] @default([]) workoutDays Int[] @default([]) allergies String[] @default([]) restrictions String[] @default([]) healthFlags String[] @default([]) consentAt DateTime? formulaVersion String? calorieTarget Int? proteinTarget Int? carbsTarget Int? fatTarget Int? waterTargetMl Int? updatedAt DateTime @updatedAt
+}
+model Exercise { id String @id @default(uuid()) name String @unique description String targetMuscles String[] equipment String[] difficulty String instructions String[] safetyNotes String alternatives String[] @default([]) createdAt DateTime @default(now()) }
+model WorkoutSession { id String @id @default(uuid()) userId String user User @relation(fields:[userId],references:[id],onDelete:Cascade) name String startedAt DateTime @default(now()) completedAt DateTime? status WorkoutStatus @default(ACTIVE) entries WorkoutEntry[] }
+model WorkoutEntry { id String @id @default(uuid()) sessionId String session WorkoutSession @relation(fields:[sessionId],references:[id],onDelete:Cascade) exerciseId String exercise Exercise @relation(fields:[exerciseId],references:[id]) sets Int reps Int weightKg Float? notes String? }
+model Food { id String @id @default(uuid()) name String @unique nameSo String? category String servingLabel String servingGrams Float calories Float proteinG Float carbsG Float fatG Float fiberG Float @default(0) source String verifiedAt DateTime? logs FoodLog[] createdAt DateTime @default(now()) }
+model FoodLog { id String @id @default(uuid()) userId String user User @relation(fields:[userId],references:[id],onDelete:Cascade) foodId String food Food @relation(fields:[foodId],references:[id]) mealType MealType quantity Float @default(1) loggedAt DateTime @default(now()) calories Float proteinG Float carbsG Float fatG Float fiberG Float createdAt DateTime @default(now()) }
+model WaterLog { id String @id @default(uuid()) userId String user User @relation(fields:[userId],references:[id],onDelete:Cascade) amountMl Int loggedAt DateTime @default(now()) }

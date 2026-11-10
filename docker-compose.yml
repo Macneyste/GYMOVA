@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: gymova
+      POSTGRES_PASSWORD: gymova
+      POSTGRES_DB: gymova
+    ports:
+      - "5432:5432"
+    volumes:
+      - gymova-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gymova -d gymova"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  gymova-postgres:
