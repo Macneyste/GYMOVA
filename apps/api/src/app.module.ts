@@ -7,6 +7,11 @@ import { AppConfigModule } from './config/app-config.module';
 import { AppConfigService } from './config/app-config.service';
 import { PrismaModule } from './database/prisma.module';
 import { HealthModule } from './modules/health/health.module';
+import { MessagingModule } from './modules/messaging/messaging.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { PermissionsGuard } from './common/guards/permissions.guard';
 
 @Module({
   imports: [
@@ -39,7 +44,15 @@ import { HealthModule } from './modules/health/health.module';
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 120 }]),
     PrismaModule,
     HealthModule,
+    MessagingModule,
+    AuthModule,
+    UsersModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  // Order matters: rate limit → authenticate → authorise.
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
+  ],
 })
 export class AppModule {}
