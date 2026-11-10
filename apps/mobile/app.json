@@ -1,1 +1,0 @@
-{ "expo": { "name": "GYMOVA", "slug": "gymova", "scheme": "gymova", "version": "0.1.0", "orientation": "portrait", "userInterfaceStyle": "dark", "plugins": ["expo-router", "expo-secure-store"], "experiments": { "typedRoutes": true }, "android": { "package": "com.gymova.app" } } }

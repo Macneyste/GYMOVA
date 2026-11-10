@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
@@ -11,7 +11,7 @@ describe('Health (e2e)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = moduleRef.createNestApplication();
     app.setGlobalPrefix('api');
-    app.enableVersioning({ defaultVersion: '1' });
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
     configureApp(app);
     await app.init();
   });

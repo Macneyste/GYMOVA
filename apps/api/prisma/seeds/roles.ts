@@ -14,7 +14,7 @@ export async function seedRolesAndPermissions(prisma: PrismaClient): Promise<voi
     await prisma.permission.upsert({ where: { code }, update: {}, create: { code } });
   }
   const permissions = await prisma.permission.findMany();
-  const byCode = new Map(permissions.map((p) => [p.code, p.id]));
+  const byCode = new Map<string, string>(permissions.map((p: { code: string; id: string }) => [p.code, p.id]));
 
   for (const name of Object.values(RoleName)) {
     const role = await prisma.role.upsert({

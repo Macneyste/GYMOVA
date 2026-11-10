@@ -1,3 +1,7 @@
-import {useCallback,useState} from 'react'; import {ScrollView,Text,View} from 'react-native'; import {useFocusEffect,useRouter} from 'expo-router'; import {request} from '@/api'; import {Card,Metric,Screen,s} from '@/ui';
-type Summary={totals:{calories:number;proteinG:number;carbsG:number;fatG:number};waterMl:number;targets:{calories:number;proteinG:number;carbsG:number;fatG:number;waterMl:number}|null};
-export default function Home(){const [data,setData]=useState<Summary|null>(null);const router=useRouter();useFocusEffect(useCallback(()=>{request<Summary>(`/nutrition/summary?date=${new Date().toISOString().slice(0,10)}`).then(setData).catch(()=>setData(null))},[]));const t=data?.targets;return <Screen><ScrollView contentContainerStyle={{gap:16}}><Text style={s.title}>Today</Text><Text style={s.subtitle}>Small consistent steps add up.</Text><Card><Text style={s.text}>Daily nutrition</Text><View style={s.row}><Metric label="calories" value={`${Math.round(data?.totals.calories??0)}`} target={t?.calories?.toString()}/><Metric label="protein g" value={`${Math.round(data?.totals.proteinG??0)}`} target={t?.proteinG?.toString()}/></View><View style={s.row}><Metric label="carbs g" value={`${Math.round(data?.totals.carbsG??0)}`} target={t?.carbsG?.toString()}/><Metric label="fat g" value={`${Math.round(data?.totals.fatG??0)}`} target={t?.fatG?.toString()}/></View></Card><Card><Text style={s.text}>Water</Text><Text style={s.title}>{data?.waterMl??0} ml</Text><Text style={s.muted}>Target: {t?.waterMl??'complete your assessment'} ml</Text></Card><Card><Text onPress={()=>router.push('/(tabs)/workout')} style={s.text}>Start today's workout →</Text><Text onPress={()=>router.push('/(tabs)/diet')} style={s.text}>Log a meal →</Text></Card></ScrollView></Screen>}
+import { useTranslation } from 'react-i18next';
+import { PlaceholderScreen } from '@/components/Placeholder';
+
+export default function HomeTab() {
+  const { t } = useTranslation();
+  return <PlaceholderScreen feature={t('tabs.home')} edges={{ top: true, bottom: false }} />;
+}

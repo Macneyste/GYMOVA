@@ -1,3 +1,0 @@
-import {create} from 'zustand'; import * as SecureStore from 'expo-secure-store'; import {clearSession, Session} from './api';
-type State={session:Session|null;hydrated:boolean;setSession:(s:Session)=>void;restore:()=>Promise<void>;logout:()=>Promise<void>};
-export const useAuth=create<State>((set)=>({session:null,hydrated:false,setSession:(session)=>set({session}),restore:async()=>{const accessToken=await SecureStore.getItemAsync('accessToken');set({session:accessToken?{accessToken,refreshToken:'',user:{id:'',email:'',fullName:''}}:null,hydrated:true})},logout:async()=>{await clearSession();set({session:null})}}));
