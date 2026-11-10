@@ -19,7 +19,17 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
-  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+  // JSON API: no HTML is served (except dev Swagger), so the CSP can forbid everything.
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      contentSecurityPolicy: config.swaggerEnabled
+        ? undefined
+        : { useDefaults: false, directives: { defaultSrc: ["'none'"], frameAncestors: ["'none'"], baseUri: ["'none'"], formAction: ["'none'"] } },
+      referrerPolicy: { policy: 'no-referrer' },
+      hsts: { maxAge: 31_536_000, includeSubDomains: true },
+    }),
+  );
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true, limit: '1mb' }));
   app.set('trust proxy', 1);
@@ -36,7 +46,7 @@ async function bootstrap(): Promise<void> {
 
   configureApp(app);
 
-  if (!config.isProduction) {
+  if (config.swaggerEnabled) {
     const document = SwaggerModule.createDocument(
       app,
       new DocumentBuilder()

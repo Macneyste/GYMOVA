@@ -1,10 +1,21 @@
 import { create } from 'zustand';
+import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { AuthSession, AuthUser } from '@gymova/shared-types';
 import { ApiError, NetworkError } from '@gymova/api-client';
 import { api, onSessionExpired, tokenStorage } from '@/services/api';
 
+/** Cached profile (email, phone, roles) is personal data, so it lives in the encrypted keystore, not AsyncStorage. */
 const USER_CACHE_KEY = 'gymova.user';
+const LEGACY_USER_CACHE_KEY = 'gymova.user'; // older builds kept it in plain AsyncStorage
+const cache = {
+  get: () => SecureStore.getItemAsync(USER_CACHE_KEY),
+  set: (v: string) => SecureStore.setItemAsync(USER_CACHE_KEY, v),
+  clear: async () => {
+    await SecureStore.deleteItemAsync(USER_CACHE_KEY);
+    await AsyncStorage.removeItem(LEGACY_USER_CACHE_KEY);
+  },
+};
 
 export type SessionStatus = 'booting' | 'signedOut' | 'signedIn';
 
@@ -31,7 +42,8 @@ export const useSession = create<SessionState>((set, get) => ({
     // Optimistically restore the cached profile (non-sensitive) so the UI renders instantly, then revalidate.
     let cached: AuthUser | null = null;
     try {
-      const raw = await AsyncStorage.getItem(USER_CACHE_KEY);
+      await AsyncStorage.removeItem(LEGACY_USER_CACHE_KEY).catch(() => undefined);
+      const raw = await cache.get();
       cached = raw ? (JSON.parse(raw) as AuthUser) : null;
     } catch {
       cached = null;
@@ -49,12 +61,12 @@ export const useSession = create<SessionState>((set, get) => ({
 
   async signIn(session) {
     await tokenStorage.setTokens(session);
-    await AsyncStorage.setItem(USER_CACHE_KEY, JSON.stringify(session.user)).catch(() => undefined);
+    await cache.set(JSON.stringify(session.user)).catch(() => undefined);
     set({ status: 'signedIn', user: session.user, expired: false });
   },
 
   async setUser(user) {
-    await AsyncStorage.setItem(USER_CACHE_KEY, JSON.stringify(user)).catch(() => undefined);
+    await cache.set(JSON.stringify(user)).catch(() => undefined);
     set({ user });
   },
 
@@ -74,7 +86,7 @@ export const useSession = create<SessionState>((set, get) => ({
       await api.auth.logout(refreshToken).catch(() => undefined);
     }
     await tokenStorage.clear();
-    await AsyncStorage.removeItem(USER_CACHE_KEY).catch(() => undefined);
+    await cache.clear().catch(() => undefined);
     set({ status: 'signedOut', user: null, expired: !!opts?.expired });
   },
 }));

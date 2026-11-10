@@ -98,7 +98,8 @@
     "message.max": "Message is too long",
     "measurement.empty": "Enter at least one measurement",
     "required": "This field is required",
-    "email.taken": "An account with this email already exists"
+    "email.taken": "An account with this email already exists",
+    "password.weak": "This password is too easy to guess. Avoid common passwords and your name or email."
   },
   "welcome": {
     "title": "Your fitness journey, personalised",

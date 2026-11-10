@@ -1,3 +1,4 @@
+# Development only. Every port is bound to 127.0.0.1 so databases are never reachable from the local network.
 # Development infrastructure for GYMOVA.
 # Run from the repository root:  npm run docker:up
 services:
@@ -9,7 +10,7 @@ services:
       POSTGRES_PASSWORD: gymova
       POSTGRES_DB: gymova
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     volumes:
       - gymova-postgres:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +23,7 @@ services:
     image: redis:7-alpine
     container_name: gymova-redis
     ports:
-      - '6379:6379'
+      - '127.0.0.1:6379:6379'
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
@@ -37,8 +38,8 @@ services:
       MINIO_ROOT_USER: gymova
       MINIO_ROOT_PASSWORD: gymova-secret
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - '127.0.0.1:9000:9000'
+      - '127.0.0.1:9001:9001'
     volumes:
       - gymova-minio:/data
     healthcheck:

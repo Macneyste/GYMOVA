@@ -98,7 +98,8 @@
     "message.max": "Fariinta aad bay u dheer tahay",
     "measurement.empty": "Geli ugu yaraan hal cabbir",
     "required": "Goobtan waa lagama maarmaan",
-    "email.taken": "Akoon leh emailkan horay ayuu u jiray"
+    "email.taken": "Akoon leh emailkan horay ayuu u jiray",
+    "password.weak": "Erayga sirta ah aad ayaa loo qiyaasi karaa. Ha isticmaalin erayo caan ah, magacaaga ama emailkaaga."
   },
   "welcome": {
     "title": "Safarkaaga caafimaad, adiga kuu gaar ah",

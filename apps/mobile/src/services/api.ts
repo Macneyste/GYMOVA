@@ -21,8 +21,20 @@ export const tokenStorage: TokenStorage = {
   },
 };
 
-export const API_URL: string =
-  process.env.EXPO_PUBLIC_API_URL ?? (Constants.expoConfig?.extra?.apiUrl as string | undefined) ?? 'http://10.0.2.2:3000/api/v1';
+export const API_URL: string = resolveApiUrl(
+  process.env.EXPO_PUBLIC_API_URL ?? (Constants.expoConfig?.extra?.apiUrl as string | undefined) ?? 'http://10.0.2.2:3000/api/v1',
+);
+
+/**
+ * Release builds only talk to the API over HTTPS: passwords and tokens must never travel in clear text.
+ * Plain http is allowed in development (emulator → localhost).
+ */
+export function resolveApiUrl(url: string, dev: boolean = __DEV__): string {
+  if (!dev && !url.startsWith('https://')) {
+    throw new Error(`Insecure API URL in a release build: ${url}. Set EXPO_PUBLIC_API_URL to an https:// URL.`);
+  }
+  return url.replace(//+$/, '');
+}
 
 type SessionExpiredHandler = () => void | Promise<void>;
 let sessionExpiredHandler: SessionExpiredHandler | null = null;

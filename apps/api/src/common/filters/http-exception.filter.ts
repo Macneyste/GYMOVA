@@ -37,7 +37,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       if (exception.code === 'P2002') {
         status = HttpStatus.CONFLICT;
-        body = { code: ApiErrorCode.CONFLICT, message: 'A record with these values already exists', details: exception.meta, requestId };
+        // Prisma meta names columns/constraints: never expose schema details to clients.
+        body = { code: ApiErrorCode.CONFLICT, message: 'A record with these values already exists', requestId };
       } else if (exception.code === 'P2025') {
         status = HttpStatus.NOT_FOUND;
         body = { code: ApiErrorCode.NOT_FOUND, message: 'The requested record was not found', requestId };

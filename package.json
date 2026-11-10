@@ -18,6 +18,7 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e -w @gymova/api",
     "lint": "npm run lint --workspaces --if-present",
+    "check:secrets": "node scripts/check-secrets.mjs",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
     "db:generate": "npm run prisma:generate -w @gymova/api",
     "db:migrate": "npm run prisma:migrate -w @gymova/api",

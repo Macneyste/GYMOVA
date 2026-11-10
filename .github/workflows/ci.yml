@@ -27,6 +27,7 @@ jobs:
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       DATABASE_URL: postgresql://gymova:gymova@localhost:5432/gymova_test?schema=public
+      MIGRATION_DATABASE_URL: postgresql://gymova:gymova@localhost:5432/gymova_test?schema=public
       JWT_ACCESS_SECRET: ci-access-secret-ci-access-secret-ci-access-secret
       JWT_REFRESH_SECRET: ci-refresh-secret-ci-refresh-secret-ci-refresh-secret
       QR_TOKEN_SECRET: ci-qr-secret-ci-qr-secret-ci-qr-secret-ci-qr
@@ -43,6 +44,8 @@ jobs:
         run: npm ci
       - name: Generate Prisma client
         run: npm run db:generate
+      - name: Secret scan (no keys in frontend or git)
+        run: npm run check:secrets
       - name: Typecheck
         run: npm run typecheck
       - name: Unit tests

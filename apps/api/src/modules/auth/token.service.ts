@@ -6,7 +6,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { AppConfigService } from '../../config/app-config.service';
 import { UnauthorizedError } from '../../common/errors/app.errors';
 import type { RequestMeta } from '../../common/auth/request-user';
-import type { AccessTokenPayload } from '../../common/guards/jwt-auth.guard';
+import { JWT_AUDIENCE, JWT_ISSUER, type AccessTokenPayload } from '../../common/guards/jwt-auth.guard';
 
 /**
  * Short-lived JWT access tokens + opaque, rotating refresh tokens.
@@ -28,7 +28,13 @@ export class TokenService {
   async issue(userId: string, meta: RequestMeta, family: string = randomUUID()): Promise<AuthTokens & { refreshTokenId: string }> {
     const { accessSecret, accessTtlSeconds, refreshTtlDays } = this.config.jwt;
     const payload: AccessTokenPayload = { sub: userId, typ: 'access' };
-    const accessToken = await this.jwt.signAsync(payload, { secret: accessSecret, expiresIn: accessTtlSeconds, algorithm: 'HS256' });
+    const accessToken = await this.jwt.signAsync(payload, {
+      secret: accessSecret,
+      expiresIn: accessTtlSeconds,
+      algorithm: 'HS256',
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+    });
 
     const refreshToken = randomBytes(48).toString('base64url');
     const record = await this.prisma.refreshToken.create({

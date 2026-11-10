@@ -15,6 +15,7 @@
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -39,15 +40,13 @@ const host = new URL(adminUrl);
 const urlFor = (user, password, db) =>
   `postgresql://${user}:${encodeURIComponent(password)}@${host.hostname}:${host.port || 5432}/${db}?schema=public`;
 
+const prismaCli = createRequire(join(apiDir, 'package.json')).resolve('prisma/build/index.js');
 const tmp = mkdtempSync(join(tmpdir(), 'gymova-roles-'));
 function execSql(url, sql) {
   const file = join(tmp, 'roles.sql');
   writeFileSync(file, sql, { mode: 0o600 });
-  const res = spawnSync('npx', ['prisma', 'db', 'execute', '--url', url, '--file', file], {
-    cwd: apiDir,
-    shell: process.platform === 'win32',
-    encoding: 'utf8',
-  });
+  // Run the Prisma CLI through node directly (no shell), so the URL is never re-parsed by a shell.
+  const res = spawnSync(process.execPath, [prismaCli, 'db', 'execute', '--url', url, '--file', file], { cwd: apiDir, encoding: 'utf8' });
   rmSync(file, { force: true });
   if (res.status !== 0) {
     // Prisma echoes the URL on some errors; strip credentials before showing anything.

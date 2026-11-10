@@ -39,6 +39,11 @@ export class AppConfigService {
     return this.get('DATABASE_URL');
   }
 
+  /** Swagger is a development aid: it is never served in production, even if the flag is set. */
+  get swaggerEnabled(): boolean {
+    return !this.isProduction && (this.nodeEnv === 'development' || String(this.get('ENABLE_SWAGGER')) === 'true');
+  }
+
   get jwt() {
     return {
       accessSecret: this.get('JWT_ACCESS_SECRET'),

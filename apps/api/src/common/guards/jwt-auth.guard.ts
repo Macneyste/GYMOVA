@@ -9,6 +9,10 @@ import { AppConfigService } from '../../config/app-config.service';
 import { PrincipalService } from '../auth/principal.service';
 import type { RequestUser } from '../auth/request-user';
 
+/** Tokens are bound to this API and its clients; a token minted for another service is rejected. */
+export const JWT_ISSUER = 'gymova-api';
+export const JWT_AUDIENCE = 'gymova-clients';
+
 export interface AccessTokenPayload {
   sub: string;
   typ: 'access';
@@ -40,6 +44,8 @@ export class JwtAuthGuard implements CanActivate {
       payload = await this.jwt.verifyAsync<AccessTokenPayload>(header.slice(7), {
         secret: this.config.jwt.accessSecret,
         algorithms: ['HS256'],
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
       });
     } catch {
       throw new UnauthorizedError('Access token is invalid or expired');

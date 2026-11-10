@@ -7,10 +7,31 @@ export const envValidationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'test', 'staging', 'production').default('development'),
   PORT: Joi.number().port().default(3000),
   API_PUBLIC_URL: Joi.string().uri().default('http://localhost:3000'),
-  CORS_ORIGINS: Joi.string().allow('').default('http://localhost:3001'),
+  CORS_ORIGINS: Joi.string()
+    .allow('')
+    .default('http://localhost:3001')
+    .when('NODE_ENV', {
+      is: 'production',
+      then: Joi.string().pattern(/^(https://[^,s]+)(,s*https://[^,s]+)*$/).messages({
+        'string.pattern.base': 'CORS_ORIGINS must list only https:// origins in production',
+      }),
+    }),
   LOG_LEVEL: Joi.string().valid('fatal', 'error', 'warn', 'info', 'debug', 'trace').default('info'),
 
-  DATABASE_URL: Joi.string().uri({ scheme: ['postgresql', 'postgres'] }).required(),
+  DATABASE_URL: Joi.string()
+    .uri({ scheme: ['postgresql', 'postgres'] })
+    .required()
+    .when('NODE_ENV', {
+      is: 'production',
+      // User data must never cross the network unencrypted.
+      then: Joi.string().pattern(/[?&]sslmode=(require|verify-ca|verify-full)/).messages({
+        'string.pattern.base': 'DATABASE_URL must use TLS in production (add ?sslmode=require or verify-full)',
+      }),
+    }),
+  // Schema owner, used only by Prisma Migrate (prisma directUrl). Never needed by the running API.
+  MIGRATION_DATABASE_URL: Joi.string().allow('').default(''),
+  /** Swagger UI at /docs. Off unless explicitly enabled; never in production. */
+  ENABLE_SWAGGER: Joi.boolean().default(false),
 
   JWT_ACCESS_SECRET: Joi.string().min(32).required(),
   JWT_REFRESH_SECRET: Joi.string().min(32).required().disallow(Joi.ref('JWT_ACCESS_SECRET')),
@@ -35,7 +56,11 @@ export const envValidationSchema = Joi.object({
   EMAIL_FROM: Joi.string().default('no-reply@gymova.app'),
 
   AI_PROVIDER: Joi.string().valid('mock', 'anthropic').default('mock'),
-  ANTHROPIC_API_KEY: Joi.string().allow('').default(''),
+  // Server-side only. Clients never receive this key: they call the GYMOVA API, which calls the provider.
+  ANTHROPIC_API_KEY: Joi.string()
+    .allow('')
+    .default('')
+    .when('AI_PROVIDER', { is: 'anthropic', then: Joi.string().min(20).required() }),
   AI_MODEL: Joi.string().default('claude-sonnet-5-5'),
   AI_VISION_MODEL: Joi.string().default('claude-sonnet-5-5'),
   AI_DAILY_MESSAGE_LIMIT: Joi.number().integer().min(1).default(40),

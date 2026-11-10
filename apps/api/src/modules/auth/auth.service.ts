@@ -10,6 +10,7 @@ import type { RequestMeta } from '../../common/auth/request-user';
 import { MessagingService } from '../messaging/messaging.service';
 import { TokenService } from './token.service';
 import { OTP_TTL_MINUTES, OtpService } from './otp.service';
+import { assertPasswordAllowed } from './password-policy';
 import type { ChangePasswordDto, LoginDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
 
 export const MAX_FAILED_LOGINS = 5;
@@ -42,6 +43,7 @@ export class AuthService implements OnModuleInit {
   // ---------------------------------------------------------------- register / login
 
   async register(dto: RegisterDto, meta: RequestMeta): Promise<AuthSession> {
+    assertPasswordAllowed(dto.password, dto);
     const roleNames: string[] = [RoleName.MEMBER];
     if (this.config.bootstrapSuperAdminEmails.includes(dto.email)) roleNames.push(RoleName.SUPER_ADMIN);
     const roles = await this.prisma.role.findMany({ where: { name: { in: roleNames } } });
@@ -187,6 +189,7 @@ export class AuthService implements OnModuleInit {
   async resetPassword(dto: ResetPasswordDto, meta: RequestMeta): Promise<{ reset: boolean }> {
     const user = await this.prisma.user.findFirst({ where: { email: dto.email, deletedAt: null, isActive: true } });
     if (!user) throw new AppException(ApiErrorCode.OTP_INVALID, 'The code is incorrect', HttpStatus.BAD_REQUEST);
+    assertPasswordAllowed(dto.password, user);
     await this.otp.consume(user.id, 'PASSWORD_RESET', dto.code);
     await this.prisma.user.update({
       where: { id: user.id },
@@ -210,6 +213,7 @@ export class AuthService implements OnModuleInit {
     if (dto.currentPassword === dto.newPassword) {
       throw new AppException(ApiErrorCode.VALIDATION, 'Choose a password you have not used here', HttpStatus.BAD_REQUEST);
     }
+    assertPasswordAllowed(dto.newPassword, user);
     await this.prisma.user.update({ where: { id: userId }, data: { passwordHash: await this.hashPassword(dto.newPassword) } });
     await this.tokens.revokeAllForUser(userId);
     await this.audit(userId, 'auth.password_changed', meta);
