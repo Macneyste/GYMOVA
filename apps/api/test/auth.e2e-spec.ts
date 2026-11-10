@@ -1,5 +1,6 @@
 import { INestApplication, VersioningType } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { ThrottlerStorage } from '@nestjs/throttler';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { configureApp } from '../src/common/bootstrap/configure-app';
@@ -33,6 +34,20 @@ describe('Auth (e2e)', () => {
   afterAll(async () => {
     await prisma.user.deleteMany({ where: { email: { endsWith: '@gymova.test' } } });
     await app.close();
+  });
+
+  // Each test is its own scenario; reset the per-IP limiter so one test's logins don't throttle the next.
+  beforeEach(() => {
+    const st = (app.get(ThrottlerStorage) as unknown as { storage: Map<string, unknown> }).storage; console.log("THR", st.size, [...st.keys()].slice(0,2)); st.clear();
+  });
+
+  it('rate-limits repeated login attempts per client', async () => {
+    const codes: number[] = [];
+    for (let i = 0; i < 11; i++) {
+      codes.push((await http().post('/api/v1/auth/login').send({ email: 'flood@gymova.test', password })).status);
+    }
+    expect(codes.slice(0, 10).every((c) => c === 401)).toBe(true);
+    expect(codes[10]).toBe(429);
   });
 
   let accessToken = '';
