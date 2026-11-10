@@ -48,10 +48,15 @@ export const otpSchema = z.object({
 });
 
 export const forgotPasswordSchema = z.object({ email: emailSchema });
-export const resetPasswordSchema = z.object({
-  token: z.string().min(10),
-  password: passwordSchema,
-});
+export const resetPasswordSchema = z
+  .object({
+    email: emailSchema,
+    code: z.string().regex(/^\d{6}$/, 'otp.invalid'),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((v) => v.password === v.confirmPassword, { path: ['confirmPassword'], message: 'password.mismatch' });
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'password.required'),
