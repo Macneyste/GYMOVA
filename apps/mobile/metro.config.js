@@ -11,6 +11,6 @@ const config = getDefaultConfig(projectRoot);
 config.watchFolders = [workspaceRoot];
 // Resolve modules from the app first, then the hoisted workspace root.
 config.resolver.nodeModulesPaths = [path.resolve(projectRoot, 'node_modules'), path.resolve(workspaceRoot, 'node_modules')];
-config.resolver.disableHierarchicalLookup = true;
+// Hierarchical lookup stays enabled: npm nests some Expo packages (e.g. expo-asset) under expo/node_modules.
 
 module.exports = config;

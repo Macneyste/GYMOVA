@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -31,14 +31,16 @@ export default function RootLayout() {
 
   const ready = fontsLoaded && i18nReady && status !== 'booting';
 
-  const onLayout = useCallback(() => {
+  // Hide the native splash once the first real frame is ready. (An onLayout callback on the gesture root
+  // is not reliably fired on Android, which left the splash covering the app.)
+  useEffect(() => {
     if (ready) void SplashScreen.hideAsync().catch(() => undefined);
   }, [ready]);
 
   if (!ready) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayout}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <ThemedApp />
