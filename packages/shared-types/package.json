@@ -1,0 +1,15 @@
+{
+  "name": "@gymova/shared-types",
+  "version": "1.0.0",
+  "description": "Domain enums, API contracts and DTO types shared by the GYMOVA API, mobile app and admin dashboard.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

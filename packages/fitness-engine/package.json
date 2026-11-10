@@ -1,8 +1,20 @@
 {
   "name": "@gymova/fitness-engine",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Deterministic, versioned fitness calculations (BMI, BMR, TDEE, calorie and macro targets, hydration, goal progress). No I/O.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "scripts": { "build": "tsc -p tsconfig.json", "test": "vitest run" },
-  "devDependencies": { "typescript": "^5.7.3", "vitest": "^3.0.7" }
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@gymova/shared-types": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
 }

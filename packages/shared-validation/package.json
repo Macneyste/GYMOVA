@@ -1,0 +1,21 @@
+{
+  "name": "@gymova/shared-validation",
+  "version": "1.0.0",
+  "description": "Zod schemas shared by the mobile app and admin dashboard forms. Mirrors the API DTO rules.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@gymova/shared-types": "*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

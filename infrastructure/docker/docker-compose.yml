@@ -1,0 +1,63 @@
+# Development infrastructure for GYMOVA.
+# Run from the repository root:  npm run docker:up
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gymova-postgres
+    environment:
+      POSTGRES_USER: gymova
+      POSTGRES_PASSWORD: gymova
+      POSTGRES_DB: gymova
+    ports:
+      - '5432:5432'
+    volumes:
+      - gymova-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U gymova -d gymova']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: gymova-redis
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: gymova-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: gymova
+      MINIO_ROOT_PASSWORD: gymova-secret
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - gymova-minio:/data
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 gymova gymova-secret &&
+      mc mb --ignore-existing local/gymova &&
+      exit 0"
+
+volumes:
+  gymova-postgres:
+  gymova-minio:
