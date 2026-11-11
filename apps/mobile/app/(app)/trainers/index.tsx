@@ -1,7 +1,10 @@
-import { useTranslation } from 'react-i18next';
-import { PlaceholderScreen } from '@/components/Placeholder';
+import { Screen } from '@/components/ui';
+import { TrainerProfile } from '@/components/fitness/TrainerProfile';
 
 export default function TrainersScreen() {
-  const { t } = useTranslation();
-  return <PlaceholderScreen feature={t('nav.trainers')} edges={{ top: false, bottom: true }} />;
+  return (
+    <Screen edges={{ top: false, bottom: true }}>
+      <TrainerProfile />
+    </Screen>
+  );
 }

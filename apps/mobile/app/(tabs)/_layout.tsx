@@ -21,11 +21,11 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: { backgroundColor: colors.backgroundSecondary, borderTopColor: colors.border, height: 64, paddingTop: 6 },
-        tabBarLabelStyle: { fontFamily: typography.fontFamily.medium, fontSize: 11, marginBottom: 6 },
-        tabBarIcon: ({ color, focused, size }) => {
+        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border, borderTopWidth: 1, height: 68, paddingTop: 8 },
+        tabBarLabelStyle: { fontFamily: typography.fontFamily.semibold, fontSize: 10, marginBottom: 8 },
+        tabBarIcon: ({ color, focused }) => {
           const [outline, filled] = icons[route.name] ?? ['ellipse-outline', 'ellipse'];
-          return <Ionicons name={focused ? filled : outline} size={size} color={color} />;
+          return <Ionicons name={focused ? filled : outline} size={22} color={color} />;
         },
         sceneStyle: { backgroundColor: colors.background },
       })}
