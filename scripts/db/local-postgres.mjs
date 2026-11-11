@@ -53,7 +53,9 @@ switch (command) {
     }
     // stdio must be 'ignore': the server inherits pg_ctl's handles, so a pipe would never close and this would hang.
     // Server output goes to the log file instead.
-    const res = pgCtl(['-l', join(home, 'postgres.log'), '-o', `-p ${port} -c listen_addresses=localhost`, '-w', 'start'], 'ignore');
+    // -t 300: after an unclean shutdown PostgreSQL fsyncs the data directory before accepting connections,
+    // which can take minutes on Windows; pg_ctl's default 60 s wait reported that as a failed start.
+    const res = pgCtl(['-l', join(home, 'postgres.log'), '-o', `-p ${port} -c listen_addresses=localhost`, '-w', '-t', '300', 'start'], 'ignore');
     if (res.status !== 0) {
       console.error(`Failed to start. See ${join(home, 'postgres.log')}`);
       process.exit(res.status ?? 1);
